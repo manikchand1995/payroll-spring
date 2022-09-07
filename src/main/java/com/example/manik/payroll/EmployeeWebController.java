@@ -5,10 +5,13 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @AllArgsConstructor
 @Controller
@@ -28,10 +31,14 @@ public class EmployeeWebController {
     }
 
     @PostMapping("/employee_form_submit")
-    public ModelAndView submitEmployeeForm(@ModelAttribute Employee employee, ModelMap model) {
-        EntityModel<Employee> entityModel = assembler.toModel(repository.save(employee));
+    public ModelAndView submitEmployeeForm(@ModelAttribute @Valid Employee employee, BindingResult bindingResult, ModelMap model) {
 
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("employee_form");
+        }
+
+        EntityModel<Employee> entityModel = assembler.toModel(repository.save(employee));
         model.addAttribute("employee", entityModel.getContent());
-        return new ModelAndView("add_employee_result", model);
+        return new ModelAndView("add_employee_result");
     }
 }

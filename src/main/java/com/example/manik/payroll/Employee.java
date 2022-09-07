@@ -5,15 +5,24 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @NoArgsConstructor @EqualsAndHashCode @ToString
 class Employee {
 
-    @Getter @Setter private @Id @GeneratedValue Long id;
-    @Getter @Setter private String firstName;
-    @Getter @Setter private String lastName;
-    @Getter @Setter private String role;
+    @Getter @Setter @Id @GeneratedValue
+    private Long id;
+
+    @Getter @Setter @NotNull @Size(min=2, max=30)
+    private String firstName;
+
+    @Getter @Setter @NotNull @Size(min=2, max=30)
+    private String lastName;
+
+    @Getter @Setter
+    private String role;
 
     Employee(String firstName, String lastName, String role) {
         this.firstName = firstName;
